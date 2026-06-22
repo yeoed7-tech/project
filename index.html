@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>신랑 여은동 & 신부 엄다혜의 모바일 청첩장</title>
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
 
     <style>
         /* 기본 스타일 리셋 및 모바일 레이아웃 최적화 */
@@ -59,21 +59,21 @@
             gap: 5px;
         }
 
-        /* 2. 메인 커버 섹션 (비디오 스타일 최적화) */
+        /* 2. 메인 커버 섹션 */
         .cover-section {
             padding: 0;
             position: relative;
-            background-color: #000; /* 영상 로드 전 혹은 여백 발생 시 깔끔하게 처리 */
+            background-color: #000;
         }
         .main-video {
             width: 100%;
             height: auto;
             display: block;
-            object-fit: cover; /* 가로세로 비율을 유지하며 꽉 차게 설정 */
+            object-fit: cover;
         }
         .cover-info {
             padding: 40px 20px;
-            background-color: #fdfbf7; /* 영상 하단 정보 영역을 기존 미색 톤과 매칭 */
+            background-color: #fdfbf7;
         }
         .cover-title {
             font-size: 18px;
@@ -122,49 +122,83 @@
             margin: 0 5px;
         }
 
-        /* 4. 갤러리 섹션 */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 4px;
-            padding: 10px 0;
+        /* 4. 갤러리 슬라이더 섹션 (스와이프 및 드래그 최적화) */
+        .gallery-section {
+            background-color: #fff;
+            overflow: hidden;
+            position: relative;
         }
-        .gallery-item {
+        .slider-container {
             width: 100%;
-            aspect-ratio: 1 / 1;
-            object-fit: cover;
-            cursor: pointer;
-            transition: opacity 0.2s;
+            position: relative;
+            overflow: hidden;
+            touch-action: pan-y;
+            user-select: none;
         }
-        .gallery-item:hover { opacity: 0.9; }
-
-        /* 사진 확대 모달(라이트박스) 스타일 */
-        .gallery-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
+        .slider-wrapper {
+            display: flex;
+            transition: transform 0.3s ease-out;
+            cursor: grab;
+        }
+        .slider-wrapper:active {
+            cursor: grabbing;
+        }
+        .slide {
+            flex: 0 0 100%;
             width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.95);
-            z-index: 2000;
+            display: flex;
             justify-content: center;
             align-items: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
         }
-        .gallery-modal.show {
-            display: flex;
-            opacity: 1;
-        }
-        .modal-content {
-            max-width: 95%;
-            max-height: 85%;
+        .slide img {
+            width: 100%;
+            max-height: 500px;
             object-fit: contain;
-            user-select: none;
-            -webkit-user-drag: none;
-            transition: transform 0.3s ease, opacity 0.2s ease;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            pointer-events: none; /* 드래그 중 이미지 자체 선택 방지 */
+        }
+
+        /* 슬라이드 화살표 버튼 */
+        .slide-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid #e0dcd5;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            color: #6e5f52;
+            z-index: 10;
+            transition: background 0.2s;
+        }
+        .slide-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+        }
+        .slide-btn.prev { left: 10px; }
+        .slide-btn.next { right: 10px; }
+
+        /* 인디케이터 (페이지 번호 점) */
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #eaddcf;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .dot.active {
+            background-color: #8a7b6e;
         }
         
         /* 5. 오시는 길 섹션 */
@@ -211,7 +245,10 @@
             color: #555;
         }
 
-        /* 6. 마음 전하실 곳 (축의금 계좌 아코디언) */
+        /* 6. 마음 전하실 곳 */
+        .account-section {
+            background-color: #fdfbf7;
+        }
         .account-btn {
             width: 100%;
             padding: 15px;
@@ -238,6 +275,9 @@
             border-radius: 0 0 6px 6px;
             text-align: left;
         }
+        .account-content.active {
+            display: block;
+        }
         .account-row {
             display: flex;
             justify-content: space-between;
@@ -262,16 +302,18 @@
 
     <div class="wrapper">
         
+        <!-- 오디오 태그 및 컨트롤러 -->
         <audio id="weddingBgm" loop>
             <source src="bgm.mp3" type="audio/mpeg">
         </audio>
-        <div id="bgmToggle" class="bgm-controller" onclick="toggleBgm()">
+        <div id="bgmToggle" class="bgm-controller">
             <span>🎵</span> <span id="bgmText">BGM 재생</span>
         </div>
 
+        <!-- 메인 커버 섹션 -->
         <section class="cover-section">
-            <video autoplay loop muted playsinline class="main-video">
-                <img src="JS_00049.jpg" alt="메인 사진">
+            <video autoplay loop muted playsinline class="main-video" poster="JS_00049.jpg">
+                <source src="wedding_movie.mp4" type="video/mp4">
             </video>
             
             <div class="cover-info">
@@ -281,195 +323,25 @@
             </div>
         </section>
 
+        <!-- 초대글 섹션 -->
         <section class="greeting-section">
             <div class="section-title serif">INVITATION</div>
             <div class="greeting-text serif">
-                서로를 만나기 위해 30년을 헤맸습니다.<br>
-                이제 하나 되어 새로운 시작을 하려 합니다.<br>
-                저희 두 사람, 부부로서의 첫발을 <br>
-                귀한 걸음으로 축복해 주시면 감사하겠습니다.<br>
+                서로가 마주 보며 다져온 사랑을<br>
+                이제 함께 하나의 길을 걷는 정으로 가꾸고자 합니다.<br>
+                저희의 뜻깊은 출발의 자리에 오셔서<br>
+                따뜻한 격려로 축복해 주시면 감사하겠습니다.
             </div>
-            <div class="relations">
-                <div>여희성 · 전미옥의 <span class="serif">차남</span> 은동</div>
-                <div>엄승용 · 박차순의 <span class="serif">차녀</span> 다혜</div>
+            <div class="relations serif">
+                여정웅 · 김명숙 <span class="relation-type">의 장남</span> 은동<br>
+                엄태호 · 최영희 <span class="relation-type">의 장녀</span> 다혜
             </div>
         </section>
 
+        <!-- 갤러리 슬라이더 섹션 (수정된 영역) -->
         <section class="gallery-section">
             <div class="section-title serif">GALLERY</div>
-            <div class="gallery-grid">
-                <img src="https://picsum.photos/300/300?random=2" alt="갤러리1" class="gallery-item" onclick="openModal(0)">
-                <img src="https://picsum.photos/300/300?random=3" alt="갤러리2" class="gallery-item" onclick="openModal(1)">
-                <img src="https://picsum.photos/300/300?random=4" alt="갤러리3" class="gallery-item" onclick="openModal(2)">
-                <img src="https://picsum.photos/300/300?random=5" alt="갤러리4" class="gallery-item" onclick="openModal(3)">
-                <img src="https://picsum.photos/300/300?random=6" alt="갤러리5" class="gallery-item" onclick="openModal(4)">
-                <img src="https://picsum.photos/300/300?random=7" alt="갤러리6" class="gallery-item" onclick="openModal(5)">
-            </div>
-        </section>
-
-        <div id="galleryModal" class="gallery-modal">
-            <img id="modalImg" class="modal-content" alt="확대된 사진">
-        </div>
-
-        <section class="map-section">
-            <div class="section-title serif">LOCATION</div>
-            <div class="venue-info">
-                <div class="venue-name serif">더 파티움 안양</div>
-                <div class="venue-address">안양시 동안구 관양동 1746</div>
-            </div>
-            <!-- 📌 [변경] 퀴즈맵 대신 캡처한 지도 이미지 삽입 -->
-    <div style="margin-bottom: 20px;">
-        <img src="mapview.png" alt="식장 지도" style="width: 100%; height: auto; border-radius: 4px; border: 1px solid #e0dcd5;">
-        <!-- 프로젝트 폴더에 map_capture.jpg 이름으로 지도 캡처본을 저장하세요 -->
-    </div>
-
-    <div class="map-buttons">
-        <!-- 📌 [변경] 각 지도 앱에서 식장을 검색한 후 공유하기를 눌러 나온 '실제 길찾기 URL'을 href에 넣으세요 -->
-        <a href="https://place.map.kakao.com/138147430" target="_blank" class="map-btn">카카오맵 길찾기</a>
-        <a href="https://naver.me/IFgdHqLz" target="_blank" class="map-btn">네이버지도 길찾기</a>
-    </div>
-        </section>
-
-        <section class="account-section">
-            <div class="section-title serif">CONGRATULATIONS</div>
-            <p style="font-size: 13px; color: #888; margin-bottom: 20px;">축복의 마음을 담아 축의금을 전하실 분들을 위한 계좌입니다.</p>
             
-            <button class="account-btn" onclick="toggleAccount('groom-account')">
-                <span>신랑측 마음 전하실 곳</span>
-                <span>▼</span>
-            </button>
-            <div id="groom-account" class="account-content">
-                <div class="account-row">
-                    <span>농협은행 123456-01-123456 (여은동)</span>
-                    <button class="copy-btn" onclick="copyText('123456-01-123456')">복사</button>
-                </div>
-            </div>
-
-            <button class="account-btn" onclick="toggleAccount('bride-account')">
-                <span>신부측 마음 전하실 곳</span>
-                <span>▼</span>
-            </button>
-            <div id="bride-account" class="account-content">
-                <div class="account-row">
-                    <span>국민은행 1002-123-456789 (엄다혜)</span>
-                    <button class="copy-btn" onclick="copyText('1002-123-456789')">복사</button>
-                </div>
-            </div>
-        </section>
-
-    </div>
-
-    <script>
-        // 1. 배경음악(BGM) 재생 제어
-        function toggleBgm() {
-            const bgm = document.getElementById('weddingBgm');
-            const bgmText = document.getElementById('bgmText');
-            
-            if (bgm.paused) {
-                bgm.play().then(() => {
-                    bgmText.innerText = "BGM 끄기";
-                }).catch(error => {
-                    alert("음원 파일 경로를 확인해 주세요. 마우스/터치 액션이 필요할 수 있습니다.");
-                });
-            } else {
-                bgm.pause();
-                bgmText.innerText = "BGM 재생";
-            }
-        }
-
-        // 2. 계좌번호 아코디언 열고 닫기
-        function toggleAccount(id) {
-            const content = document.getElementById(id);
-            if (content.style.display === 'block') {
-                content.style.display = 'none';
-            } else {
-                content.style.display = 'block';
-            }
-        }
-
-        // 3. 계좌번호 클립보드 복사 기능
-        function copyText(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert("계좌번호가 복사되었습니다.");
-            }).catch(err => {
-                const dummy = document.createElement("input");
-                document.body.appendChild(dummy);
-                dummy.value = text;
-                dummy.select();
-                document.execCommand("copy");
-                document.body.removeChild(dummy);
-                alert("계좌번호가 복사되었습니다.");
-            });
-        }
-
-        // 4. 갤러리 이미지 스와이프 및 모달 스크립트
-        let currentIndex = 0;      
-        let touchStartX = 0;       
-        let touchEndX = 0;         
-        const swipeThreshold = 50; 
-
-        const galleryItems = document.querySelectorAll('.gallery-item');
-
-        function openModal(index) {
-            currentIndex = index;
-            const modal = document.getElementById('galleryModal');
-            const modalImg = document.getElementById('modalImg');
-            
-            modalImg.src = galleryItems[currentIndex].src;
-            modal.classList.add('show');
-            document.body.style.overflow = 'hidden'; 
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('galleryModal');
-            modal.classList.remove('show');
-            document.body.style.overflow = 'auto'; 
-        }
-
-        function changeImage(direction) {
-            currentIndex += direction;
-            
-            if (currentIndex < 0) {
-                currentIndex = galleryItems.length - 1; 
-            } else if (currentIndex >= galleryItems.length) {
-                currentIndex = 0; 
-            }
-
-            const modalImg = document.getElementById('modalImg');
-            
-            modalImg.style.opacity = '0';
-            setTimeout(() => {
-                modalImg.src = galleryItems[currentIndex].src;
-                modalImg.style.opacity = '1';
-            }, 150);
-        }
-
-        const modalContainer = document.getElementById('galleryModal');
-
-        modalContainer.addEventListener('touchstart', function(e) {
-            touchStartX = e.changedTouches[0].screenX;
-        }, { passive: true });
-
-        modalContainer.addEventListener('touchend', function(e) {
-            touchEndX = e.changedTouches[0].screenX;
-            handleGesture();
-        }, { passive: true });
-
-        function handleGesture() {
-            const deltaX = touchEndX - touchStartX;
-            
-            if (deltaX < -swipeThreshold) {
-                changeImage(1);
-            } else if (deltaX > swipeThreshold) {
-                changeImage(-1);
-            }
-        }
-
-        modalContainer.addEventListener('click', function(e) {
-            if (e.target === modalContainer) {
-                closeModal();
-            }
-        });
-    </script>
-</body>
-</html>
+            <div class="slider-container" id="sliderContainer">
+                <!-- 좌우 화살표 버튼 -->
+                <button class="slide-btn prev" id="prevBtn">◀</button>
