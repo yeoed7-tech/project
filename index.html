@@ -50,6 +50,14 @@
         .account-content { display: none; background: #fff; padding: 15px; border: 1px solid #eaddcf; border-top: none; margin-top: -10px; margin-bottom: 15px; border-radius: 0 0 6px 6px; }
         .account-content.active { display: block; }
         .copy-btn { background: #8a7b6e; color: #fff; border: none; padding: 4px 8px; font-size: 11px; border-radius: 4px; cursor: pointer; }
+
+	/* 오시는 길 섹션 스타일 */
+	.map-container { margin: 20px 0; border: 1px solid #eaddcf; border-radius: 8px; overflow: hidden; background: #fff; }
+	.map-image { width: 100%; height: auto; display: block; }
+	.map-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 15px; }
+	.map-btn { flex: 1; padding: 12px; border: 1px solid #eaddcf; border-radius: 6px; font-size: 14px; text-decoration: none; font-weight: 500; display: inline-block; }
+	.map-btn.naver { background-color: #03C75A; color: #fff; border-color: #03C75A; }
+	.map-btn.kakao { background-color: #FEE500; color: #191919; border-color: #FEE500; }
     </style>
 </head>
 
@@ -111,9 +119,25 @@
         <section class="account-section">
             <div class="section-title serif">마음 전하실 곳</div>
             <button class="account-btn" onclick="toggleAccount('groomAcc')">신랑측 계좌 <span>▼</span></button>
-            <div id="groomAcc" class="account-content">국민 123-456-789 (여은동) <button class="copy-btn" onclick="copyText('123456789')">복사</button></div>
+            <div id="groomAcc" class="account-content">농협 302-2583-1411-11 (여은동) <button class="copy-btn" onclick="copyText('3022583141111')">복사</button></div>
             <button class="account-btn" onclick="toggleAccount('brideAcc')">신부측 계좌 <span>▼</span></button>
-            <div id="brideAcc" class="account-content">신한 987-654-321 (엄다혜) <button class="copy-btn" onclick="copyText('987654321')">복사</button></div>
+            <div id="brideAcc" class="account-content">국민 063302-04-110111 (엄다혜) <button class="copy-btn" onclick="copyText('06330204110111')">복사</button></div>
+        </section>
+	<section class="location-section">
+            <div class="section-title serif">LOCATION</div>
+            <div class="cover-date" style="margin-bottom: 20px;">
+                <strong>더 파티움 안양</strong><br>
+                경기도 안양시 동안구 관악대로 24
+            </div>
+
+            <div class="map-container">
+                <img src="mapview.png" alt="오시는 길 지도" class="map-image">
+            </div>
+
+            <div class="map-buttons">
+                <a href="네이버_지도_공유_링크" target="_blank" class="map-btn naver">네이버 지도 앱 바로가기</a>
+                <a href="카카오_맵_공유_링크" target="_blank" class="map-btn kakao">카카오 맵 앱 바로가기</a>
+            </div>
         </section>
     </div>
 
@@ -130,6 +154,8 @@
 
 
             <script>
+	bgm.play();
+	document.getElementById('bgmText').innerText="BGM 정지";
         // BGM 및 계좌 기능
         const bgm = document.getElementById('weddingBgm');
         document.getElementById('bgmToggle').onclick = () => {
