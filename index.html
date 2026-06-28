@@ -154,8 +154,6 @@
 
 
             <script>
-	bgm.play();
-	document.getElementById('bgmText').innerText="BGM 정지";
         // BGM 및 계좌 기능
         const bgm = document.getElementById('weddingBgm');
         document.getElementById('bgmToggle').onclick = () => {
@@ -169,6 +167,25 @@
         const modal = document.getElementById('galleryModal'), wrapper = document.getElementById('sliderWrapper'), counter = document.getElementById('slideCounter'), items = document.querySelectorAll('.gallery-item');
         let currentIndex = 0, startX = 0, currentT = 0, prevT = 0, isDragging = false;
 
+        function playBgm() {
+            if(bgm.paused) { 
+                bgm.play().then(() => {
+                    document.getElementById('bgmText').innerText="BGM 정지";
+                    // 재생 성공 시 브라우저 첫 터치 이벤트 제거 (중복 실행 방지)
+                    window.removeEventListener('click', playBgm);
+                    window.removeEventListener('touchstart', playBgm);
+                }).catch(err => {
+                    console.log("자동 재생 차단됨 (사용자 반응 대기):", err);
+                });
+            }
+        }
+
+        // 1. 페이지 로드 시 즉시 재생 시도
+        window.addEventListener('DOMContentLoaded', playBgm);
+        // 2. 브라우저 차단을 대비해 사용자가 화면을 처음 터치/클릭할 때 재생 시도
+        window.addEventListener('click', playBgm);
+        window.addEventListener('touchstart', playBgm);
+				
         function openModal(idx) {
             currentIndex = idx;
             wrapper.innerHTML = '';
