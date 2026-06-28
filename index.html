@@ -58,6 +58,16 @@
 	.map-btn { flex: 1; padding: 12px; border: 1px solid #eaddcf; border-radius: 6px; font-size: 14px; text-decoration: none; font-weight: 500; display: inline-block; }
 	.map-btn.naver { background-color: #03C75A; color: #fff; border-color: #03C75A; }
 	.map-btn.kakao { background-color: #FEE500; color: #191919; border-color: #FEE500; }
+
+	/* 교통 안내 */
+	.transport-wrap { margin-top: 28px; display: flex; flex-direction: column; gap: 12px; text-align: left; }
+	.transport-card { background: #fdfbf7; border: 1px solid #eaddcf; border-radius: 8px; padding: 14px 16px; }
+	.transport-card-header { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 13px; color: #6e5f52; margin-bottom: 8px; }
+	.transport-icon { font-size: 16px; }
+	.transport-card p { font-size: 13px; color: #5a5047; line-height: 1.7; margin: 0; }
+	.parking-list { list-style: none; margin: 0; padding: 0; }
+	.parking-list li { font-size: 13px; color: #5a5047; line-height: 1.8; display: flex; gap: 6px; }
+	.parking-list li::before { content: attr(data-num); flex-shrink: 0; background: #8a7b6e; color: #fff; border-radius: 50%; width: 16px; height: 16px; font-size: 10px; display: flex; align-items: center; justify-content: center; margin-top: 3px; }
     </style>
 </head>
 
@@ -137,6 +147,26 @@
             <div class="map-buttons">
                 <a href="https://naver.me/IFgdHqLz" target="_blank" class="map-btn naver">네이버지도 길찾기</a>
                 <a href="https://place.map.kakao.com/138147430" target="_blank" class="map-btn kakao">카카오 길찾기</a>
+            </div>
+
+            <div class="transport-wrap">
+                <div class="transport-card">
+                    <div class="transport-card-header"><span class="transport-icon">🚌</span> 버스</div>
+                    <p>'평촌역' 정류장 하차</p>
+                </div>
+                <div class="transport-card">
+                    <div class="transport-card-header"><span class="transport-icon">🚇</span> 지하철</div>
+                    <p>4호선 평촌역 3번 출구<br>횡단보도 맞은 편</p>
+                </div>
+                <div class="transport-card">
+                    <div class="transport-card-header"><span class="transport-icon">🅿️</span> 주차장</div>
+                    <ul class="parking-list">
+                        <li data-num="1">더파티움 안양 본건물</li>
+                        <li data-num="2">지아이에스 (구, 네온테크)</li>
+                        <li data-num="3">이마트 평촌점</li>
+                        <li data-num="4">칼라힐 주차빌딩</li>
+                    </ul>
+                </div>
             </div>
         </section>
     </div>
